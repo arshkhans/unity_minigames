@@ -53,17 +53,18 @@ public class PlayerMovement : MonoBehaviour
 
             Jump();
 
+            Debug.Log("Jumping");
+
             Invoke(nameof(ResetJump), jumpCooldown);
         }
     }
 
-    private void MovePlayer()
+    public void MovePlayer()
     {
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
         // on ground
         if(grounded)
             rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
-
         // in air
         else if(!grounded)
             rb.AddForce(moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);

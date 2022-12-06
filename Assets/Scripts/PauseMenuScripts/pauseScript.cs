@@ -21,8 +21,8 @@ public class pauseScript : MonoBehaviour
 
     public void QuitGame()
     {
-        UnityEditor.EditorApplication.isPlaying = false;
-        // SceneManager.LoadScene("MainMenu");
+        // UnityEditor.EditorApplication.isPlaying = false;
+        SceneManager.LoadScene("MainMenu");
         Application.Quit();
     }
 
