@@ -1,9 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : NetworkBehaviour
 {
+    [SerializeField] private GameObject CineCam;
+
     [Header("Movement")]
     public float moveSpeed;
 
@@ -39,6 +40,7 @@ public class PlayerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
+        if (IsOwner) CineCam.SetActive(true);
     }
 
     private void MyInput()
@@ -97,6 +99,7 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!IsOwner) return;
         MyInput();
         SpeedControl();
 
@@ -114,6 +117,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (!IsOwner) return;
         MovePlayer();
     }
 }
