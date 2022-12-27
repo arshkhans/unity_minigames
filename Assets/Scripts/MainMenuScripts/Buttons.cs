@@ -1,15 +1,23 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class Buttons : MonoBehaviour
 {
-    static public string mode = "Host";
+    static public string GameMode = "Host";
+    static public string PlayerName = "Admin";
+    [SerializeField] private TMP_InputField InputName;
+    [SerializeField] private GameObject ConfirmMenu;
+
+    private void StartScene()
+    {
+        SceneManager.LoadScene("main");
+    }
 
     public void StartGame()
     {
-        mode = "Default";
-        SceneManager.LoadScene("main");
-        Debug.Log("Start");
+        GameMode = "Default";
+        StartScene();
     }
 
     public void QuitGame()
@@ -21,14 +29,26 @@ public class Buttons : MonoBehaviour
 
     public void StartHost()
     {
-        mode = "Host";
-        SceneManager.LoadScene("main");
+        GameMode = "Host";
+        ConfirmMenu.SetActive(true);
     }
 
     public void StartClient()
     {
-        mode = "Client";
-        SceneManager.LoadScene("main");
+        GameMode = "Client";
+        ConfirmMenu.SetActive(true);
     }
+
+    public void GoBack()
+    {
+        ConfirmMenu.SetActive(false);
+    }
+
+    public void Confirm()
+    {
+        PlayerName = InputName.text;
+        StartScene();
+    }
+    
 
 }

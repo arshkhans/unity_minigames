@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - onPause
+  - Portal
   layers:
   - Default
   - TransparentFX
@@ -39,6 +40,12 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Background
+    uniqueID: 3459204445
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Terrain
+    uniqueID: 1011329203
     locked: 0

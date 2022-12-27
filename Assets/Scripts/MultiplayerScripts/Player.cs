@@ -1,73 +1,35 @@
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.UI;
+using TMPro;
+using Unity.Collections;
 
 namespace Multiplayer
 {
     public class Player : NetworkBehaviour
     {
-        // private NetworkVariable<PlayerData> PlayerPosition = new NetworkVariable<PlayerData>(new PlayerData{},
-        //     NetworkVariableReadPermission.Everyone,NetworkVariableWritePermission.Owner);
-        
-        // public struct PlayerData : INetworkSerializable
-        // {
-        //     public float horizontalInput;
-        //     public float verticalInput;
-
-        //     public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
-        //     {
-        //         serializer.SerializeValue(ref horizontalInput);
-        //         serializer.SerializeValue(ref verticalInput);
-        //     }
-        // }
-
-        // Changed OnIsServerAuthoritative()
-
-        [Header("Movement")]
-        [SerializeField] private float moveSpeed;
-
-        Rigidbody rb;
-
-        public Text myText;
-
-        public Transform orientation;
-
-        float horizontalInput;
-        float verticalInput;
-
-        Vector3 moveDirection;
+        [SerializeField] private TMP_Text displayNameText;
+        [SerializeField] private Renderer playerBody3D;
+        private NetworkVariable<FixedString32Bytes> displayName = new NetworkVariable<FixedString32Bytes>();
 
         public override void OnNetworkSpawn()
         {
-            rb = GetComponent<Rigidbody>();
-            rb.freezeRotation = true;
+            // This is gonna fk me some day
+            if (IsClient && !IsHost){
+                displayNameText.text = displayName.Value.ToString();
+            }else{
+                SyncNames(OwnerClientId);
+            }
         }
 
-        private void MyInput()
+        private void SyncNames(ulong _clientId)
         {
-            // PlayerPosition.Value = new PlayerData {
-            //     horizontalInput = Input.GetAxisRaw("Horizontal"),
-            //     verticalInput = Input.GetAxisRaw("Vertical")
-            // };
-
-            horizontalInput = Input.GetAxisRaw("Horizontal");
-            verticalInput = Input.GetAxisRaw("Vertical");
-            var mode = NetworkManager.Singleton.IsHost ?
-                "Host" : NetworkManager.Singleton.IsServer ? "Server" : "Client";
+            PlayerData? playerData = InitiateMultiplayer.GetPlayerData(_clientId);
+            if (playerData.HasValue)
+            {
+                displayNameText.text = playerData.Value.PlayerName;
+                displayName.Value = playerData.Value.PlayerName;
+            }
         }
 
-        public void MovePlayer()
-        {
-            moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
-            rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
-        }
-
-        void Update()
-        {
-            if (!IsOwner) return;
-            
-            MyInput();
-            MovePlayer();
-        }
     }
 }
