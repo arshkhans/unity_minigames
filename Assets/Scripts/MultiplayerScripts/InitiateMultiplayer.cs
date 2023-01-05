@@ -61,7 +61,6 @@ namespace Multiplayer
             response.Approved = true;
 
             response.Position = Vector3.zero;
-            response.Position = Vector3.zero;
             response.Rotation = Quaternion.identity;
 
             if (response.Approved)
