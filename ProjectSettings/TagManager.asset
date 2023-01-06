@@ -6,6 +6,8 @@ TagManager:
   tags:
   - onPause
   - Portal
+  - Cherry
+  - Trap
   layers:
   - Default
   - TransparentFX
@@ -42,6 +44,9 @@ TagManager:
   m_SortingLayers:
   - name: Background
     uniqueID: 3459204445
+    locked: 0
+  - name: OnBackgroud
+    uniqueID: 1526785079
     locked: 0
   - name: Default
     uniqueID: 0

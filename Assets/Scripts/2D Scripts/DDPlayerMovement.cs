@@ -12,8 +12,13 @@ public class DDPlayerMovement : MonoBehaviour
     [Header("Keybinds")]
     public KeyCode jumpKey = KeyCode.Space;
 
+    [Header("Audio")]
+    [SerializeField] private AudioSource jumpSoundEffect;
+
     public LayerMask whatIsGround;
     private BoxCollider2D coll;
+
+    private bool isStatic = true;
 
     private enum MovementState { idle, running, jumping, falling }
 
@@ -39,6 +44,7 @@ public class DDPlayerMovement : MonoBehaviour
 
         if (Input.GetKey(jumpKey) && IsGrounded())
         {
+            jumpSoundEffect.Play();
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
         }
 
@@ -78,10 +84,23 @@ public class DDPlayerMovement : MonoBehaviour
         return Physics2D.BoxCast(coll.bounds.center, coll.bounds.size, 0f, Vector2.down, .1f, whatIsGround);
     }
 
+    private void staticPlayer()
+    {
+        isStatic = true;
+        rb.bodyType = RigidbodyType2D.Static;
+    }
+
+    private void dynamicPlayer()
+    {
+        isStatic = false;
+        rb.bodyType = RigidbodyType2D.Dynamic;
+    }
+
     // Update is called once per frame
     void Update()
     {
-        MovePlayer();
+        if (!isStatic)
+            MovePlayer();
         UpdateAnimation();
     }
 }
